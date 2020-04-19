@@ -2,6 +2,9 @@ var doc = jQuery(document);
 
 $(window).on("load", function () {
   $(".loader").fadeOut(500);
+  document.getElementById("name").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("message").value = "";
 });
 
 doc.ready(function () {
