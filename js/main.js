@@ -1,104 +1,88 @@
 var doc = jQuery(document);
 
-$(window).on("load",function(){
-	$('.loader').fadeOut(500);
+$(window).on("load", function () {
+  $(".loader").fadeOut(500);
 });
 
-doc.ready(function(){
+doc.ready(function () {
+  "use strict";
 
-	"use strict";
+  $(window).scrollTop(0);
 
-	$(window).scrollTop(0);
+  var typed = new Typed(".mytext", {
+    strings: [
+      "Chanpreet Singh",
+      "Software Developer",
+      "Machine Learning Enthusiast",
+    ],
+    smartBackspace: true, // Default value
+    loop: true,
+    backDelay: 1000,
+    typeSpeed: 10,
+  });
 
-	var typed = new Typed(".mytext", {
-	  strings: ["Alex Doe", "Web Developer","Graphics Designer"],
-	  smartBackspace: true, // Default value
-	  loop:true,
-	  backDelay: 1000,
-	  typeSpeed: 10
-	});
+  $(".navbar-nav").onePageNav({
+    currentClass: "active",
+  });
 
-	$('.navbar-nav').onePageNav({
-		currentClass: 'active'
-	});
+  if ($(window).scrollTop() < 200) {
+    $(".navbar-nav").addClass("navbar-nav-bg");
+  }
 
-	if($(window).scrollTop()<200)
-	{
-		$('.navbar-nav').addClass('navbar-nav-bg');
-	}
+  $(window).scroll(function () {
+    var top = $(window).scrollTop();
 
-	$(window).scroll(function(){
+    if (top >= 200) {
+      $("header").addClass("overlay");
+      $(".navbar-nav").removeClass("navbar-nav-bg");
+    } else if ($("header").hasClass("overlay")) {
+      $("header").removeClass("overlay");
+    } else {
+      $(".navbar-nav").addClass("navbar-nav-bg");
+    }
+  });
 
-		var top = $(window).scrollTop();
+  $(".progress-content .skill-progress").each(function () {
+    var waypoint = new Waypoint({
+      element: this,
+      handler: function (direction) {
+        var value = $(this.element).attr("data-progress");
+        $(this.element).css("width", "" + value + "%");
+      },
+      offset: "70%",
+    });
+  });
 
-		if(top>=200)
-		{
-			$('header').addClass('overlay');
-			$('.navbar-nav').removeClass('navbar-nav-bg');
-		}
+  /*** scrolling animation ***/
 
-		else if($('header').hasClass('overlay'))
-		{
-			$('header').removeClass('overlay');
-		}
-		else
-		{
-			$('.navbar-nav').addClass('navbar-nav-bg');
-		}
-	});
+  $(".animation").each(function () {
+    var waypoint = new Waypoint({
+      element: this,
+      handler: function (direction) {
+        var cssvalue = $(this.element).attr("data-animation");
 
-	$('.progress-content .skill-progress').each(function(){
+        $(this.element).addClass("animated " + cssvalue);
+        $(this.element).css("opacity", "1").fadeIn(2000);
+      },
+      offset: "70%",
+    });
+  });
 
-		var waypoint = new Waypoint({
-		  element: this,
-		  handler: function(direction) {
-		    var value = $(this.element).attr('data-progress');
-			$(this.element).css('width',''+value+'%');
-		  },
-		  offset: '70%'
-		})
+  var $grid = $(".portfolio-container").isotope({
+    // options
+    itemSelector: ".portfolio-item",
+  });
 
-	});
+  $(".filter li").on("click", function () {
+    $(".filter li").removeClass("filter-active");
+    var filterValue = $(this).attr("data-filter");
+    $grid.isotope({ filter: filterValue });
+    $(this).addClass("filter-active");
+  });
 
-
-	/*** scrolling animation ***/
-
-	$('.animation').each(function(){
-
-		var waypoint = new Waypoint({
-		  element: this,
-		  handler: function(direction) {
-		    var cssvalue = $(this.element).attr('data-animation');
-
-			$(this.element).addClass("animated "+cssvalue);
-			$(this.element).css('opacity','1').fadeIn(2000);
-		  },
-		  offset: '70%'
-		})
-
-	});
-
-	
-
-	 var $grid = $('.portfolio-container').isotope({
-	  // options
-	  itemSelector: '.portfolio-item'
-	  
-	});
-
-	$('.filter li').on( 'click', function() {
-
-		$('.filter li').removeClass('filter-active');
-	  var filterValue = $(this).attr('data-filter');
-	  $grid.isotope({ filter: filterValue });
-	  $(this).addClass('filter-active');
-	});
-
-	 $(".testimonial-container").owlCarousel({
-
-	 	items:1,
-	 	autoplay:true,
-	 	rewind:true
-	 });
-
+  $(".testimonial-container").owlCarousel({
+    items: 1,
+    autoplay: true,
+    rewind: true,
+  });
 });
