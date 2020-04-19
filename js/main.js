@@ -10,15 +10,11 @@ doc.ready(function () {
   $(window).scrollTop(0);
 
   var typed = new Typed(".mytext", {
-    strings: [
-      "Chanpreet Singh",
-      "Software Developer",
-      "Machine Learning Enthusiast",
-    ],
+    strings: ["Learner", "Full Stack Developer", "Machine Learning Enthusiast"],
     smartBackspace: true, // Default value
     loop: true,
     backDelay: 1000,
-    typeSpeed: 10,
+    typeSpeed: 50,
   });
 
   $(".navbar-nav").onePageNav({
