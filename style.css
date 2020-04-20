@@ -900,8 +900,6 @@ textarea {
 
 #submit {
   width: auto;
-  /* //margin: 0 auto; */
-  max-width: 50%;
   padding: 8px 60px;
   border: none;
   color: #fff;
