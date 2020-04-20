@@ -15,13 +15,13 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link rel="stylesheet" type="text/css" href="css/responsive.css">
 	<script type="text/javascript" src="js/respond.js"></script>
+	
 </head>
 <body>
-
+<div style="position:fixed;top:0px;left:0px;width:0;height:0;" id="scrollzipPoint"></div>
 <div class="loader">
 	<img src="img/loader.gif" alt="loader-image">
 </div>
-
 <header id="header">
 	<div class="container">
 		<div class="row">
@@ -84,18 +84,33 @@
 			</div>
 			<div class="col-md-7 animation" data-animation="fadeInRight">
 				<h3>About Me</h3>
-				<h5>Web Developer & Graphics Designer</h5>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable</p>
+				<h5>Developer & ML Enthusiast</h5>
+				<p>I am a full stack developer.I design, build & sometimes rescue applications.</p>
 				<p>All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.</p>
-				<div class="about-social-icons">
-					<a href="#"><i class="fa fa-facebook"></i></a>
-					<a href="#"><i class="fa fa-twitter"></i></a>
-					<a href="#"><i class="fa fa-google-plus"></i></a>
-					<a href="#"><i class="fa fa-linkedin"></i></a>
-					<a href="#"><i class="fa fa-dribbble"></i></a>
-				</div>
+				<div class="row">
 
-				<a class="about-contact" href="#">Contact Me</a>
+					<div class="col-md-6 col-sm-3 ">
+						<div class="count-item">
+							<div class="numscroller numscroller-big-bottom scrollzip roller-title-number-1" data-slno="1" data-min="0" data-max="1000000" data-delay="30" data-increment="1000">1000000</div>
+							<div class="count-name-intro">Lines of Code</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-3 ">
+						<div class="count-item">
+							<div class="numscroller numscroller-big-bottom scrollzip roller-title-number-2" data-slno="2" data-min="0" data-max="100" data-delay="10" data-increment="5">100</div>
+							<div class="count-name-intro">Sense of humour</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-3">
+						<div class="count-item">
+							<div class="numscroller numscroller-big-bottom scrollzip roller-title-number-3" data-slno="3" data-min="0" data-max="987" data-delay="10" data-increment="10">987</div>
+							<div class="count-name-intro">Cups of tea</div>
+						</div>
+					</div>
+					
+				</div>
+			
+				<!-- <a class="about-contact" href="#">Contact Me</a> -->
 			</div>
 		</div>
 	</div>
@@ -681,6 +696,7 @@
 <!-- js links -->
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/numscroller-1.0.js"></script>
 <script type="text/javascript" src="js/particles.min.js"></script>
 <script type="text/javascript" src="js/myparticles.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
