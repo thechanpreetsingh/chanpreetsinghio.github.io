@@ -5,6 +5,16 @@ $(window).on("load", function () {
   document.getElementById("name").value = "";
   document.getElementById("email").value = "";
   document.getElementById("message").value = "";
+  var top = $(window).scrollTop();
+
+  if (top >= 200) {
+    $("header").addClass("overlay");
+    $(".navbar-nav").removeClass("navbar-nav-bg");
+  } else if ($("header").hasClass("overlay")) {
+    $("header").removeClass("overlay");
+  } else {
+    $(".navbar-nav").addClass("navbar-nav-bg");
+  }
 });
 
 doc.ready(function () {
@@ -40,6 +50,19 @@ doc.ready(function () {
       $(".navbar-nav").addClass("navbar-nav-bg");
     }
   });
+
+  function navbarClassOverlay() {
+    var top = $(window).scrollTop();
+    debugger;
+    if (top >= 200) {
+      $("header").addClass("overlay");
+      $(".navbar-nav").removeClass("navbar-nav-bg");
+    } else if ($("header").hasClass("overlay")) {
+      $("header").removeClass("overlay");
+    } else {
+      $(".navbar-nav").addClass("navbar-nav-bg");
+    }
+  }
 
   $(".progress-content .skill-progress").each(function () {
     var waypoint = new Waypoint({
