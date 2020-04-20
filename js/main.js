@@ -10,7 +10,7 @@ $(window).on("load", function () {
 doc.ready(function () {
   "use strict";
 
-  $(window).scrollTop(0);
+  // $(window).scrollTop(0);
 
   var typed = new Typed(".mytext", {
     strings: ["Learner", "Full Stack Developer", "Machine Learning Enthusiast"],
