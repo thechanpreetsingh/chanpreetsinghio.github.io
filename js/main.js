@@ -5,8 +5,8 @@ $(window).on("load", function () {
   document.getElementById("name").value = "";
   document.getElementById("email").value = "";
   document.getElementById("message").value = "";
-  var top = $(window).scrollTop();
-
+ //funtion to remove css 
+ var top = $(window).scrollTop();
   if (top >= 200) {
     $("header").addClass("overlay");
     $(".navbar-nav").removeClass("navbar-nav-bg");
