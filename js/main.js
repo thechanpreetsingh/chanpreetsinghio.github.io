@@ -71,7 +71,7 @@ doc.ready(function () {
         var value = $(this.element).attr("data-progress");
         $(this.element).css("width", "" + value + "%");
       },
-      offset: "70%",
+      offset: "90%",
     });
   });
 
@@ -86,7 +86,7 @@ doc.ready(function () {
         $(this.element).addClass("animated " + cssvalue);
         $(this.element).css("opacity", "1").fadeIn(1000);
       },
-      offset: "70%",
+      offset: "90%",
     });
   });
 
