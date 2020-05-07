@@ -84,7 +84,7 @@ doc.ready(function () {
         var cssvalue = $(this.element).attr("data-animation");
 
         $(this.element).addClass("animated " + cssvalue);
-        $(this.element).css("opacity", "1").fadeIn(2000);
+        $(this.element).css("opacity", "1").fadeIn(1000);
       },
       offset: "70%",
     });
