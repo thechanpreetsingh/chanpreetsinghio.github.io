@@ -1,6 +1,6 @@
 particlesJS("myparticles", {
   particles: {
-    number: { value: 50, density: { enable: true, value_area: 800 } },
+    number: { value: 90, density: { enable: true, value_area: 700 } },
     color: { value: "#ffffff" },
     shape: {
       type: "circle",
@@ -16,7 +16,7 @@ particlesJS("myparticles", {
     size: {
       value: 5,
       random: false,
-      anim: { enable: false, speed: 40, size_min: 0.1, sync: false }
+      anim: { enable: true, speed: 40, size_min: 0.1, sync: false }
     },
     line_linked: {
       enable: true,
@@ -28,7 +28,7 @@ particlesJS("myparticles", {
     move: {
       enable: true,
       speed: 6,
-      direction: "none",
+      direction: "bottom",
       random: false,
       straight: false,
       out_mode: "out",
@@ -39,7 +39,7 @@ particlesJS("myparticles", {
   interactivity: {
     detect_on: "canvas",
     events: {
-      onhover: { enable: true, mode: "repulse" },
+      onhover: { enable: true, mode: "none" },
       onclick: { enable: true, mode: "push" },
       resize: true
     },

@@ -453,7 +453,7 @@ canvas {
   position: relative;
 }
 
-.skill-progress::before {
+/* .skill-progress::before {
   position: absolute;
   top: -40px;
   right: -7px;
@@ -463,9 +463,9 @@ canvas {
   padding: 1px 5px;
   font-size: 12px;
   border-radius: 10px;
-}
+} */
 
-.skill-progress::after {
+/* .skill-progress::after {
   position: absolute;
   content: "";
   width: 0;
@@ -475,7 +475,7 @@ canvas {
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
   border-top: 6px solid #fff;
-}
+} */
 
 /*** service styles ***/
 
@@ -931,3 +931,7 @@ footer {
   color: #fff;
   background-color: rgba(0, 98, 102, 0.9);
 }
+
+
+
+
