@@ -913,8 +913,8 @@ textarea {
 }
 
 #submit:hover {
-  border-color: #e84118;
-  background-color: #e84118;
+  border-color: rgba(0, 98, 102, 0.9);
+  background-color: rgba(0, 98, 102, 0.9);
 }
 
 .contact i.fa {
