@@ -846,7 +846,7 @@ ul.filter li.filter-active {
 
 .contact {
   position: relative;
-  background: url(img/contact-bg.jpg);
+  background: url(img/about-bg.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
