@@ -71,7 +71,7 @@ doc.ready(function () {
         var value = $(this.element).attr("data-progress");
         $(this.element).css("width", "" + value + "%");
       },
-      offset: "100%",
+      offset: "120%",
     });
   });
 
