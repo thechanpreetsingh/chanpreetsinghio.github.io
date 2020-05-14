@@ -1,1 +1,1 @@
-#iamchansingh.github.io
+iamchansingh.github.io
