@@ -1,1 +1,1 @@
-#chanpreetsinghio.github.io chan
+#chanpreetsinghio.github.io
