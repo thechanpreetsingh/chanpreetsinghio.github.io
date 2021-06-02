@@ -1,5 +1,5 @@
 /* ** css *** */
-
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +11,7 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 15px;
   color: #777;
   line-height: 1.5;
@@ -182,7 +182,7 @@ button:focus {
 .main {
   width: 100%;
   height: 100vh;
-  background: url(img/BG.jpg);
+  background: url(img/BG.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -198,7 +198,7 @@ button:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .main-content {
