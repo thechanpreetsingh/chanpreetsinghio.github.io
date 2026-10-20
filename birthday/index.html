@@ -346,22 +346,37 @@ function cloud(draw, want) {
   return pts;
 }
 
-const drawName = (g, w, h) => {
-  const size = Math.min(w * .22, h * .30);
+/* shared text setup — stroke as well as fill, so this face's hairlines
+   survive the sampling grid at phone sizes */
+function prepText(g) {
   g.fillStyle = '#fff'; g.strokeStyle = '#fff';
   g.textAlign = 'center'; g.textBaseline = 'middle';
   g.lineJoin = g.lineCap = 'round';
   try { g.letterSpacing = '0.06em'; } catch {}
+}
+
+/* one centred line, shrunk to fit `maxW` of the width */
+function fitLine(g, text, w, y, size, maxW) {
   const face = px => `500 ${px}px 'Cormorant Garamond', Georgia, serif`;
   g.font = face(size);
   let px = size;
-  const w0 = g.measureText('GURLEEN').width;
-  if (w0 > w * .88) { px = size * (w * .88 / w0); g.font = face(px); }
-  // stroke as well as fill: the hairlines of this face are ~2px at phone
-  // size, thin enough for the sampling grid to skip entirely
+  const w0 = g.measureText(text).width;
+  if (w0 > w * maxW) { px = size * (w * maxW / w0); g.font = face(px); }
   g.lineWidth = Math.max(1.6, px * .018);
-  g.strokeText('GURLEEN', w / 2, h * .46);
-  g.fillText('GURLEEN', w / 2, h * .46);
+  g.strokeText(text, w / 2, y);
+  g.fillText(text, w / 2, y);
+}
+
+const drawGreeting = (g, w, h) => {
+  prepText(g);
+  const s = Math.min(w * .19, h * .105);
+  fitLine(g, 'HAPPY',    w, h * .40, s, .66);
+  fitLine(g, 'BIRTHDAY', w, h * .53, s, .88);
+};
+
+const drawName = (g, w, h) => {
+  prepText(g);
+  fitLine(g, 'GURLEEN', w, h * .46, Math.min(w * .22, h * .30), .88);
 };
 
 const drawHeart = (g, w, h) => {
@@ -381,7 +396,8 @@ let shape = null, morphT0 = 0, GATHER = 2600;   // ms of staggered arrival
 function morph(kind, instant) {
   shape = kind;
   morphT0 = performance.now();
-  const draw = kind === 'name' ? drawName : drawHeart;
+  const draw = { name: drawName, heart: drawHeart, greeting: drawGreeting }[kind];
+  if (!draw) return;
   const pts = cloud(draw, DAYS);
   if (!pts.length) return;
 
@@ -493,8 +509,10 @@ async function advance() {
     try { await song.play(); sound.classList.remove('muted'); } catch {}
     show(-1);
     await wait(900);
-    morph('name');
-    await wait(6400);
+    morph('greeting');          // the dots say it first...
+    await wait(5200);
+    morph('name');              // ...then become her
+    await wait(6200);
   } else if (step === 1) {
     release();
     await wait(800);
