@@ -269,7 +269,8 @@ const P = [];
 for (let i = 0; i < DAYS; i++) {
   P.push({ x:0, y:0, vx:0, vy:0, tx:null, ty:null, hx:0, hy:0,
            r:.5 + Math.random()*1.25, a:.16 + Math.random()*.5,
-           ph:Math.random()*6.283, sp:.5 + Math.random()*1.1, tone:Math.random() });
+           ph:Math.random()*6.283, sp:.5 + Math.random()*1.1, tone:Math.random(),
+           k:.004, wait:0 });
 }
 
 function resize() {
@@ -336,9 +337,10 @@ const drawHeart = (g, w, h) => {
 };
 
 /* morph: both sets sorted by angle, so they swirl into place instead of crossing */
-let shape = null;
+let shape = null, morphT0 = 0, GATHER = 2600;   // ms of staggered arrival
 function morph(kind, instant) {
   shape = kind;
+  morphT0 = performance.now();
   const draw = kind === 'name' ? drawName : drawHeart;
   const pts = fitStep(draw, DAYS);
   if (!pts.length) return;
@@ -356,7 +358,10 @@ function morph(kind, instant) {
     const p = P[pi];
     p.tx = t.x + (Math.random()-.5)*2.4;
     p.ty = t.y + (Math.random()-.5)*2.4;
-    if (instant) { p.x = p.tx; p.y = p.ty; }
+    // each day finds its place in its own time
+    p.wait = Math.pow(Math.random(), .8) * GATHER;
+    p.k    = .0030 + Math.random() * .0028;
+    if (instant) { p.x = p.tx; p.y = p.ty; p.wait = 0; }
   });
 }
 
@@ -373,9 +378,9 @@ function frame(ms) {
   bloom *= .975;
 
   for (const p of P) {
-    if (p.tx !== null) {
-      p.vx += (p.tx - p.x) * .013; p.vy += (p.ty - p.y) * .013;
-      p.vx *= .88; p.vy *= .88;
+    if (p.tx !== null && ms - morphT0 >= p.wait) {
+      p.vx += (p.tx - p.x) * p.k; p.vy += (p.ty - p.y) * p.k;
+      p.vx *= .942; p.vy *= .942;
     } else {
       p.vx += (p.hx - p.x) * .0006 + Math.sin(t * .22 * p.sp + p.ph) * .011;
       p.vy += (p.hy - p.y) * .0006 + Math.cos(t * .19 * p.sp + p.ph) * .011;
@@ -449,7 +454,7 @@ async function advance() {
     show(-1);
     await wait(900);
     morph('name');
-    await wait(2400);
+    await wait(6400);
   } else if (step === 1) {
     release();
     await wait(800);
@@ -495,7 +500,7 @@ function hideVerse() {
 async function finish() {
   document.getElementById('hint').style.opacity = 0;
   morph('heart');
-  await wait(1900);
+  await wait(5000);
   show(4);
   await wait(2800);
   release();
