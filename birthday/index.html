@@ -1,455 +1,530 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="ie lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>    <html class="ie lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>    <html class="ie lt-ie9"> <![endif]-->
-<!--[if gt IE 8]> <html> <![endif]-->
-<!--[if !IE]><!--><html lang="en"><!-- <![endif]-->
+<html lang="en">
 <head>
-	<title>Happy Birthday</title>
-	<meta charset="UTF-8" />
-	<meta name="description" content="Happy Birthday Gurleen">
-	<meta name="robots" content="index, follow" />
-    <meta name="keywords" content="Birthday, Happy">
-    <!-- Strat of Facebook Meta -->
-    <meta property="og:type" content="E-Greeting" />
-    <meta property="og:image" content="favicon.ico" />
-    <meta property="og:description" content="Happy Birthday, my love">
-    <!-- End of Facebook Meta Tags -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="stylesheet.css">
-	<link rel="stylesheet" type="text/css" href="loading.css">
-	<link href='https://fonts.googleapis.com/css?family=Signika:400,700' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Dancing+Script:400,700' rel='stylesheet' type='text/css'>
-	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'> -->
-	<link rel="stylesheet/less" href="cake.less"> 
-	<style type="text/css" id="less:birthday-cake">
-    
-    /* ============================================== POSITION
-*/
-.cake {
-  position: absolute;
-  display: none;
-  left: 50%;
-  margin-left: -150px;
-  width: 300px;
-  height: 300px;
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday, Gurleen</title>
+<meta name="description" content="Happy Birthday Gurleen">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b0810">
+<meta property="og:title" content="Happy Birthday, Gurleen">
+<meta property="og:description" content="Two thousand one hundred and ninety ordinary days.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0b0810; --glow:#f0b55f; --rose:#e8929f; --cream:#f7efe4;
+  --dim:rgba(247,239,228,.45);
+  --ease:cubic-bezier(.22,.61,.36,1);
 }
-/* ============================================== BASE
-*/
-.cake:after {
-  background: #ffffff;
-  border-radius: 300px;
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 300px;
-  height: 6px;
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{
+  height:100%;height:100dvh;
+  overflow:hidden;overscroll-behavior:none;
 }
-/* ============================================== Candle
-*/
-.velas {
-  background: #ffffff;
-  border-radius: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -7.5px;
-  margin-top: -25px;
-  width: 15px;
-  height: 50px;
+body{
+  background:var(--night); color:var(--cream);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  user-select:none;-webkit-user-select:none;
 }
-.velas:after,
-.velas:before {
-  background: rgba(255, 0, 0, 0.4);
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 6.66666667px;
+
+#field{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1}
+
+#warmth{
+  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;
+  background:radial-gradient(120% 90% at 50% 108%,rgba(240,181,95,.30),rgba(232,146,159,.10) 42%,transparent 72%);
+  transition:opacity 3.5s var(--ease);
 }
-.velas:after {
-  top: 25%;
-  left: 0;
+body.lit #warmth{opacity:1}
+#vignette{
+  position:fixed;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(130% 100% at 50% 50%,transparent 38%,rgba(5,3,8,.72) 100%);
 }
-.velas:before {
-  top: 45%;
-  left: 0;
+
+/* ---------- string lights ---------- */
+#lights{
+  position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:92px;z-index:4;pointer-events:none;
+  opacity:0;transform:translateY(-14px);
+  transition:opacity 2.2s var(--ease),transform 2.2s var(--ease);
 }
-/* ============================================== Fire
-*/
-.fuego {
-  display: none;
-  border-radius: 100%;
-  box-shadow: 0 0 40px 10px rgba(248, 233, 209, 0.2);
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  margin-left: -10px;
-  width: 20px;
-  height: 37.5px;
+body.lit #lights{opacity:1;transform:none}
+#lights svg{position:absolute;inset:0;width:100%;height:100%}
+#lights .wire{fill:none;stroke:rgba(247,239,228,.17);stroke-width:1}
+.bulb{
+  position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
+  background:radial-gradient(circle at 36% 32%,#fff8e6,var(--c) 62%,rgba(0,0,0,0));
+  box-shadow:0 0 12px 3px var(--c),0 0 32px 9px var(--c);
+  animation:breathe var(--dur) ease-in-out infinite var(--delay);
 }
-.fuego:nth-child(1) {
-  -webkit-animation: fuego 2s infinite;
-  -moz-animation: fuego 2s infinite;
-  -o-animation: fuego 2s infinite;
-  -ms-animation: fuego 2s infinite;
-  animation: fuego 2s infinite;
+@keyframes breathe{0%,100%{opacity:.45;transform:scale(.88)}50%{opacity:1;transform:scale(1.08)}}
+
+/* ---------- stage ---------- */
+main{
+  position:fixed;inset:0;z-index:6;display:grid;place-items:center;
+  padding:calc(96px + env(safe-area-inset-top,0px)) 22px calc(150px + env(safe-area-inset-bottom,0px));
 }
-.fuego:nth-child(2) {
-  -webkit-animation: fuego 1.5s infinite;
-  -moz-animation: fuego 1.5s infinite;
-  -o-animation: fuego 1.5s infinite;
-  -ms-animation: fuego 1.5s infinite;
-  animation: fuego 1.5s infinite;
+.scene{
+  grid-area:1/1;width:100%;max-width:640px;text-align:center;
+  opacity:0;visibility:hidden;transform:translateY(14px);
+  transition:opacity 1.1s var(--ease),transform 1.1s var(--ease),visibility 0s 1.1s;
 }
-.fuego:nth-child(3) {
-  -webkit-animation: fuego 1s infinite;
-  -moz-animation: fuego 1s infinite;
-  -o-animation: fuego 1s infinite;
-  -ms-animation: fuego 1s infinite;
-  animation: fuego 1s infinite;
+.scene.on{opacity:1;visibility:visible;transform:none;
+  transition:opacity 1.4s var(--ease),transform 1.4s var(--ease),visibility 0s}
+
+.kicker{
+  font-family:'Jost',system-ui,sans-serif;font-weight:300;font-size:11px;
+  letter-spacing:.42em;text-transform:uppercase;color:var(--dim);margin-bottom:26px;
 }
-.fuego:nth-child(4) {
-  -webkit-animation: fuego 0.5s infinite;
-  -moz-animation: fuego 0.5s infinite;
-  -o-animation: fuego 0.5s infinite;
-  -ms-animation: fuego 0.5s infinite;
-  animation: fuego 0.5s infinite;
+.lede{font-size:clamp(26px,6.4vw,40px);font-weight:300;line-height:1.38;font-style:italic}
+.sub{
+  font-family:'Jost',sans-serif;font-weight:300;font-size:clamp(13px,3.4vw,15px);
+  line-height:1.85;color:var(--dim);margin-top:22px;
 }
-.fuego:nth-child(5) {
-  -webkit-animation: fuego 0.2s infinite;
-  -moz-animation: fuego 0.2s infinite;
-  -o-animation: fuego 0.2s infinite;
-  -ms-animation: fuego 0.2s infinite;
-  animation: fuego 0.2s infinite;
+.count{color:var(--glow);font-variant-numeric:tabular-nums}
+
+/* ---------- cake ---------- */
+.cake-wrap{display:grid;place-items:end center;height:230px;margin-bottom:12px}
+.cake{position:relative;width:180px;height:150px}
+.tier{position:absolute;left:50%;transform:translateX(-50%);border-radius:7px}
+.tier.btm{bottom:0;width:180px;height:62px;background:linear-gradient(#f3e3d2,#dcc3ad)}
+.tier.top{bottom:62px;width:124px;height:50px;background:linear-gradient(#f7ece0,#e6d0bb)}
+.tier::after{
+  content:"";position:absolute;left:0;right:0;top:-7px;height:16px;background:var(--rose);
+  -webkit-mask:radial-gradient(9px 11px at 9px 0,#000 97%,transparent) repeat-x 0 100%/18px 16px;
+  mask:radial-gradient(9px 11px at 9px 0,#000 97%,transparent) repeat-x 0 100%/18px 16px;
+  opacity:.82;border-radius:4px 4px 0 0;
 }
-/* ============================================== Animation Fire
-*/
-@-webkit-keyframes fuego {
-  0% {
-    background: rgba(254, 248, 97, 0.5);
-    -webkit-transform: translateY(0) scale(1);
-  }
-  50% {
-    background: rgba(255, 50, 0, 0.1);
-    -webkit-transform: translateY(-60px) scale(0);
-  }
-  100% {
-    background: rgba(254, 248, 97, 0.5);
-    -webkit-transform: translateY(0) scale(1);
-  }
+.candle{
+  position:absolute;bottom:112px;left:50%;transform:translateX(-50%);
+  width:8px;height:40px;border-radius:3px;background:linear-gradient(#f7efe4,#e3cdb6);
 }
-@-moz-keyframes fuego {
-  0% {
-    background: rgba(254, 248, 97, 0.5);
-    -moz-transform: translateY(0) scale(1);
-  }
-  50% {
-    background: rgba(255, 50, 0, 0.1);
-    -moz-transform: translateY(-60px) scale(0);
-  }
-  100% {
-    background: rgba(254, 248, 97, 0.5);
-    -moz-transform: translateY(0) scale(1);
-  }
+.wick{position:absolute;top:-5px;left:50%;transform:translateX(-50%);
+  width:2px;height:6px;background:#4a3a2c;border-radius:1px}
+.flame{
+  position:absolute;top:-30px;left:50%;width:15px;height:28px;margin-left:-7.5px;
+  transform-origin:50% 100%;
+  background:linear-gradient(to top,#fff6dc 4%,#ffc265 38%,#ff9a3c 66%,rgba(255,110,30,0) 100%);
+  border-radius:50% 50% 46% 46%/64% 64% 36% 36%;
+  filter:blur(.5px);
+  box-shadow:0 0 28px 12px rgba(255,172,70,.42),0 0 70px 30px rgba(255,140,50,.18);
+  opacity:0;transition:opacity 1.6s var(--ease);
 }
-@-o-keyframes fuego {
-  0% {
-    background: rgba(254, 248, 97, 0.5);
-    -o-transform: translateY(0) scale(1);
-  }
-  50% {
-    background: rgba(255, 50, 0, 0.1);
-    -o-transform: translateY(-60px) scale(0);
-  }
-  100% {
-    background: rgba(254, 248, 97, 0.5);
-    -o-transform: translateY(0) scale(1);
-  }
+body.candle-lit .flame{opacity:1;animation:flick 2.4s ease-in-out infinite}
+@keyframes flick{
+  0%,100%{transform:scale(1) rotate(-1deg)}
+  28%{transform:scale(1.07,.95) rotate(1.4deg)}
+  54%{transform:scale(.95,1.08) rotate(-1.6deg)}
+  76%{transform:scale(1.04,.98) rotate(.8deg)}
 }
-@-ms-keyframes fuego {
-  0% {
-    background: rgba(254, 248, 97, 0.5);
-    -ms-transform: translateY(0) scale(1);
-  }
-  50% {
-    background: rgba(255, 50, 0, 0.1);
-    -ms-transform: translateY(-60px) scale(0);
-  }
-  100% {
-    background: rgba(254, 248, 97, 0.5);
-    -ms-transform: translateY(0) scale(1);
-  }
+
+/* ---------- the letter ---------- */
+#verse{
+  font-size:clamp(27px,6.6vw,42px);font-weight:300;line-height:1.42;font-style:italic;
+  min-height:2.9em;display:grid;place-items:center;text-wrap:balance;
+  opacity:0;filter:blur(7px);transform:translateY(9px);
+  transition:opacity .85s var(--ease),filter .85s var(--ease),transform .85s var(--ease);
 }
-@keyframes fuego {
-  0% {
-    background: rgba(254, 248, 97, 0.5);
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    background: rgba(255, 50, 0, 0.1);
-    transform: translateY(-60px) scale(0);
-  }
-  100% {
-    background: rgba(254, 248, 97, 0.5);
-    transform: translateY(0) scale(1);
-  }
+#verse.show{opacity:1;filter:blur(0);transform:none}
+#bar{width:min(190px,46vw);height:1px;background:rgba(247,239,228,.15);margin:44px auto 0}
+#bar i{display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--rose),var(--glow));transition:width .9s linear}
+#hint{
+  font-family:'Jost',sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(247,239,228,.22);margin-top:18px;
 }
-/* ============================================== Frosting
-*/
-.cobertura {
-  background: #ece7e3;
-  border-radius: 150px;
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  margin-left: -83.33333333px;
-  margin-top: -15px;
-  width: 166.66666667px;
-  height: 37.5px;
-  z-index: 10;
+
+.sig{font-size:clamp(30px,7.6vw,48px);font-weight:400;font-style:italic;line-height:1.3}
+.sig em{color:var(--glow)}
+
+/* ---------- controls ---------- */
+#go{
+  position:fixed;left:50%;bottom:max(38px,calc(env(safe-area-inset-bottom,0px) + 30px));
+  transform:translateX(-50%);z-index:8;
+  font-family:'Jost',sans-serif;font-weight:300;font-size:12px;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--cream);background:transparent;
+  border:1px solid rgba(247,239,228,.26);border-radius:999px;padding:15px 32px;cursor:pointer;
+  transition:border-color .5s,background .5s,opacity .9s var(--ease),letter-spacing .5s;
+  -webkit-tap-highlight-color:transparent;
 }
-.cobertura:after,
-.cobertura:before {
-  background: #ece7e3;
-  border-radius: 300px;
-  content: "";
-  position: absolute;
-  width: 15px;
-  height: 30px;
+#go:hover,#go:focus-visible{
+  border-color:rgba(240,181,95,.75);background:rgba(240,181,95,.09);letter-spacing:.36em;outline:none}
+#go[hidden]{opacity:0;pointer-events:none;display:block}
+#sound{
+  position:fixed;top:max(20px,calc(env(safe-area-inset-top,0px) + 14px));right:20px;z-index:9;
+  width:40px;height:40px;display:grid;place-items:center;background:transparent;
+  border:1px solid rgba(247,239,228,.18);border-radius:50%;color:var(--dim);cursor:pointer;
+  opacity:0;transition:opacity .9s,color .4s,border-color .4s;-webkit-tap-highlight-color:transparent;
 }
-.cobertura:after {
-  top: 20px;
-  right: 42.85714286px;
+#sound.in{opacity:1}
+#sound:hover{color:var(--cream);border-color:rgba(247,239,228,.45)}
+#sound svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round}
+#sound .off{display:none}
+#sound.muted .on{display:none}
+#sound.muted .off{display:block}
+
+@media (max-width:520px){
+  main{padding:calc(74px + env(safe-area-inset-top,0px)) 20px calc(138px + env(safe-area-inset-bottom,0px))}
+  #lights{height:72px}
+  .cake-wrap{height:196px}
+  .cake{transform:scale(.86);transform-origin:50% 100%}
 }
-.cobertura:before {
-  top: 30px;
-  right: 27.27272727px;
-}
-/* ============================================== BIZCOCHO
-*/
-.bizcocho {
-  background: #6d3826;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  margin-left: -75px;
-  width: 150px;
-  height: 100px;
-}
-.bizcocho:after,
-.bizcocho:before {
-  background: rgba(236, 231, 227, 0.6);
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 15px;
-}
-.bizcocho:after {
-  top: 30%;
-  left: 0;
-}
-.bizcocho:before {
-  top: 60%;
-  left: 0;
-}
-/* ============================================== TEXT
-*/
-h1,
-p {
-  font-family: 'Lato', sans-serif;
-  font-weight: 300;
-  font-style: italic;
-  text-align: center;
-  width: 100%;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.2s!important}
 }
 </style>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.1.0/less.min.js"></script>
 </head>
-
 <body>
-	<div class="loading"></div>
-	<audio class="song" controls loop>
-        <source src="hbd.mp3"></source>
-	   Your browser isn't invited for super fun audio time.
-    </audio>
-    <div class="balloons text-center" id="b1">
-    	<h2 style="color:#F2B300;">G</h2>
-    </div>
-    <div class="balloons text-center" id="b2">
-    	<h2 style="color:#0719D4;">U</h2>
-    </div>
-	<div class="balloons text-center" id="b3">
-    	<h2 style="color:#D14D39;">R</h2>
-    </div>
-	<div class="balloons text-center" id="b4">
-    	<h2 style="color:#8FAD00;">L</h2>
-    </div>
-	<div class="balloons text-center" id="b5">
-    	<h2 style="color:#8377E4;">E</h2>
-    </div>
-    <div class="balloons text-center" id="b6">
-    	<h2 style="color:#99C96A;">E</h2>
-    </div>
-    <div class="balloons text-center" id="b7">
-    	<h2 style="color:#20CFB4;">N</h2>
-    </div>
 
-    <img src="Balloon-Border.png" width="100%" class="balloon-border">
- 
+<canvas id="field"></canvas>
+<div id="warmth"></div>
+<div id="vignette"></div>
+<div id="lights" aria-hidden="true"></div>
 
-	<div class="container">
-		
-		<div class="row">
-			<div class="col-md-2 col-xs-2 bulb-holder">
-				<div class="bulb" id="bulb_yellow"></div>
-			</div>
-			<div class="col-md-2 col-xs-2 bulb-holder">
-				<div class="bulb" id="bulb_red"></div>
-			</div>
-			<div class="col-md-2 col-xs-2 bulb-holder">
-				<div class="bulb" id="bulb_blue"></div>
-			</div>
-			<div class="col-md-2 col-xs-2 bulb-holder">
-				<div class="bulb" id="bulb_green"></div>
-			</div>
-			<div class="col-md-2 col-xs-2 bulb-holder">
-				<div class="bulb" id="bulb_pink"></div>
-			</div>
-			<div class="col-md-2 col-xs-2 bulb-holder">
-				<div class="bulb" id="bulb_orange"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12 text-center">
-				<img src="banner.png" class="bannar">
-			</div>
-		</div>
-		<div class="row cake-cover">
-			<div class="col-md-12 texr-center">
-				<div class="cake">
-				  <div class="velas">
-				    <div class="fuego"></div>
-				    <div class="fuego"></div>
-				    <div class="fuego"></div>
-				    <div class="fuego"></div>
-				    <div class="fuego"></div>
-				  </div>
-				  <div class="cobertura"></div>
-				  <div class="bizcocho"></div>
-				</div>
-			</div>
-		</div>
-		<div class="row message">
-			<div class="col-md-12">
-				<p>Today is your birthday...</p>
-				<p>but I keep thinking</p>
-				<p>about all the ordinary days</p>
-				<p>the ones nobody photographs</p>
-				<p>because that's where</p>
-				<p>I learned what loving you means</p>
-				<p>Six years ago...</p>
-				<p>I built you a page like this one</p>
-				<p>and I called you my friend</p>
-				<p>I meant it</p>
-				<p>I just didn't know yet</p>
-				<p>how much that word would grow</p>
-				<p>Now...</p>
-				<p>you're the first thought</p>
-				<p>I wake up with</p>
-				<p>and the last voice</p>
-				<p>I hear at night</p>
-				<p>I know your footsteps</p>
-				<p>I know which smile is the real one</p>
-				<p>I know what your quiet means</p>
-				<p>before you say a word</p>
-				<p>and still...</p>
-				<p>you surprise me</p>
-				<p>Thank you...</p>
-				<p>for the home you made out of us</p>
-				<p>for staying</p>
-				<p>on the days I was hard to stay with</p>
-				<p>for laughing at my jokes</p>
-				<p>long after they stopped being funny</p>
-				<p>for every ordinary evening</p>
-				<p>you made worth coming home to</p>
-				<p>I love you...</p>
-				<p>not the way I did at the beginning</p>
-				<p>louder than that</p>
-				<p>and quieter than that</p>
-				<p>in a way I still have no word for</p>
-				<p>You are my favourite person</p>
-				<p>my safest place</p>
-				<p>and the best decision</p>
-				<p>I have ever made</p>
-				<p>So...</p>
-				<p>Happy Birthday, my love</p>
-				<p>may this year be gentle with you</p>
-				<p>may everything you hope for</p>
-				<p>find its way to you</p>
-				<p>and may you always know</p>
-				<p>exactly how loved you are</p>
-				<p>I would choose you again</p>
-				<p>in every lifetime</p>
-				<p>Happy Birthday, Gurleen Kaur</p>
-			</div>
-		</div>
-		<div class="row the-end">
-			<div class="col-md-12 text-center">
+<main>
+  <section class="scene" id="s0">
+    <p class="kicker">For Gurleen</p>
+    <p class="lede">Every dot here is one day<br>since you married me.</p>
+    <p class="sub"><span class="count" id="tally">0</span> ordinary days.<br>Nobody photographed them. I remember all of them.</p>
+  </section>
 
-				<p>Happy Birthday, my love &#9829;</p>
-				<p class="the-end-note">You can close this window now &mdash; or press replay to hear it all over again.</p>
-				<button class="btn btn-primary" id="replay">Replay the message</button>
-			</div>
-		</div>
-		<div class="navbar navbar-fixed-bottom">
-			<div class="row">
-				<div class="col-md-6 text-center col-md-offset-3">
-					<button class="btn btn-primary" id="turn_on">Turn On Lights</button>
-					<button class="btn btn-primary" id="play">Play Music</button>
-					<button class="btn btn-primary" id="bannar_coming">Let's Decorate</button>
-					<button class="btn btn-primary" id="balloons_flying">Fly With Balloons</button>
-					<button class="btn btn-primary" id="cake_fadein">Most Delicious Cake Ever</button>
-					<button class="btn btn-primary" id="light_candle"> Light Candle</button>
-					<button class="btn btn-primary" id="wish_message">Happy Birthday</button>
-					<button class="btn btn-primary" id="story">A mesage for you</button>
-					<!-- <button class="btn btn-primary" id="cake_cut">Lrt's Cut the Cake</button> -->
-				</div>
-			</div>
-			<!-- <div class="col-md-2">
-			</div>
-			<div class="col-md-2">
-			</div>
-			<div class="col-md-2">
-			</div>
-			<div class="col-md-2">
-			</div>
-			<div class="col-md-2">
-			</div> -->
-		</div>
+  <section class="scene" id="s1">
+    <p class="kicker">Six years</p>
+    <p class="lede">They were never<br>ordinary at all.</p>
+  </section>
 
+  <section class="scene" id="s2">
+    <div class="cake-wrap">
+      <div class="cake">
+        <div class="candle"><div class="wick"></div><div class="flame"></div></div>
+        <div class="tier top"></div>
+        <div class="tier btm"></div>
+      </div>
+    </div>
+    <p class="sub">Make a wish. Take your time.</p>
+  </section>
 
-	</div>
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<script src="effect.js"></script>
+  <section class="scene" id="s3">
+    <p id="verse"></p>
+    <div id="bar"><i></i></div>
+    <p id="hint">tap to go faster</p>
+  </section>
+
+  <section class="scene" id="s4">
+    <p class="sig">Happy Birthday,<br><em>my love.</em></p>
+    <p class="sub">That is all of it &mdash; everything I had to say.<br>You can close this now, or stay a while.</p>
+  </section>
+</main>
+
+<button id="go">Begin</button>
+
+<button id="sound" class="muted" aria-label="Toggle sound">
+  <svg class="on" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+  <svg class="off" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="m17 9 4 6M21 9l-4 6"/></svg>
+</button>
+
+<audio id="song" src="hbd.mp3" loop preload="auto"></audio>
+
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+(() => {
+'use strict';
 
-  ga('create', 'UA-58229732-1', 'auto');
-  ga('send', 'pageview');
+const DAYS = 2190;                 // six years — one particle per day
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
+const VERSES = [
+  "Today is your birthday...","but I keep thinking","about all the ordinary days",
+  "the ones nobody photographs","because that's where","I learned what loving you means",
+  "Six years ago...","I built you a page like this one","and I called you my friend",
+  "I meant it","I just didn't know yet","how much that word would grow",
+  "Now...","you're the first thought","I wake up with","and the last voice","I hear at night",
+  "I know your footsteps","I know which smile is the real one","I know what your quiet means",
+  "before you say a word","and still...","you surprise me",
+  "Thank you...","for the home you made out of us","for staying",
+  "on the days I was hard to stay with","for laughing at my jokes",
+  "long after they stopped being funny","for every ordinary evening",
+  "you made worth coming home to",
+  "I love you...","not the way I did at the beginning","louder than that",
+  "and quieter than that","in a way I still have no word for",
+  "You are my favourite person","my safest place","and the best decision","I have ever made",
+  "So...","Happy Birthday, my love","may this year be gentle with you",
+  "may everything you hope for","find its way to you","and may you always know",
+  "exactly how loved you are","I would choose you again","in every lifetime",
+  "Happy Birthday, Gurleen Kaur"
+];
+const BLOOM_AT = 3;                // "the ones nobody photographs" — the field flares
+
+/* ========================= the field of days ========================= */
+const cv = document.getElementById('field');
+const ctx = cv.getContext('2d');
+let W = 0, H = 0, DPR = 1, ready = false;
+
+const P = [];
+for (let i = 0; i < DAYS; i++) {
+  P.push({ x:0, y:0, vx:0, vy:0, tx:null, ty:null, hx:0, hy:0,
+           r:.5 + Math.random()*1.25, a:.16 + Math.random()*.5,
+           ph:Math.random()*6.283, sp:.5 + Math.random()*1.1, tone:Math.random() });
+}
+
+function resize() {
+  DPR = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * DPR; cv.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  for (const p of P) {
+    if (!ready || p.hx > W || p.hy > H) { p.hx = Math.random()*W; p.hy = Math.random()*H; }
+    if (!ready) { p.x = p.hx; p.y = p.hy; }
+  }
+  ready = true;
+  if (shape) morph(shape, true);
+}
+
+/* sample anything drawn on an offscreen canvas into a point cloud */
+function sample(draw, step) {
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const g = c.getContext('2d', { willReadFrequently:true });
+  draw(g, W, H);
+  const d = g.getImageData(0, 0, W, H).data;
+  const pts = [];
+  const s = Math.max(2, Math.round(step));
+  for (let y = 0; y < H; y += s)
+    for (let x = 0; x < W; x += s)
+      if (d[(y * W + x) * 4 + 3] > 128) pts.push({ x, y });
+  return pts;
+}
+
+function fitStep(draw, want) {       // converge on a step size giving ~want points
+  let step = 6, pts = sample(draw, step);
+  for (let k = 0; k < 6 && pts.length; k++) {
+    if (pts.length > want * 1.6) step += 1.5;
+    else if (pts.length < want * .6) step -= 1;
+    else break;
+    if (step < 2) { step = 2; pts = sample(draw, step); break; }
+    pts = sample(draw, step);
+  }
+  return pts;
+}
+
+const drawName = (g, w, h) => {
+  const size = Math.min(w * .22, h * .30);
+  g.fillStyle = '#fff';
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  try { g.letterSpacing = '0.06em'; } catch {}
+  g.font = `400 ${size}px 'Cormorant Garamond', Georgia, serif`;
+  if (g.measureText('GURLEEN').width > w * .88)
+    g.font = `400 ${size * (w * .88 / g.measureText('GURLEEN').width)}px 'Cormorant Garamond', Georgia, serif`;
+  g.fillText('GURLEEN', w / 2, h * .46);
+};
+
+const drawHeart = (g, w, h) => {
+  const s = Math.min(w, h) * .0145;
+  g.fillStyle = '#fff';
+  g.save(); g.translate(w / 2, h * .46); g.beginPath();
+  for (let t = 0; t <= 6.284; t += .01) {
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
+    t === 0 ? g.moveTo(x*s, y*s) : g.lineTo(x*s, y*s);
+  }
+  g.closePath(); g.fill(); g.restore();
+};
+
+/* morph: both sets sorted by angle, so they swirl into place instead of crossing */
+let shape = null;
+function morph(kind, instant) {
+  shape = kind;
+  const draw = kind === 'name' ? drawName : drawHeart;
+  const pts = fitStep(draw, DAYS);
+  if (!pts.length) return;
+
+  let cx = 0, cy = 0;
+  for (const q of pts) { cx += q.x; cy += q.y; }
+  cx /= pts.length; cy /= pts.length;
+  pts.sort((a,b) => Math.atan2(a.y-cy, a.x-cx) - Math.atan2(b.y-cy, b.x-cx));
+
+  const order = P.map((_,i) => i)
+    .sort((a,b) => Math.atan2(P[a].y-H/2, P[a].x-W/2) - Math.atan2(P[b].y-H/2, P[b].x-W/2));
+
+  order.forEach((pi, k) => {
+    const t = pts[Math.floor(k / order.length * pts.length)];
+    const p = P[pi];
+    p.tx = t.x + (Math.random()-.5)*2.4;
+    p.ty = t.y + (Math.random()-.5)*2.4;
+    if (instant) { p.x = p.tx; p.y = p.ty; }
+  });
+}
+
+function release() {
+  shape = null;
+  for (const p of P) { p.tx = p.ty = null; p.hx = Math.random()*W; p.hy = Math.random()*H; }
+}
+
+let bright = .34, bloom = 0;
+function frame(ms) {
+  ctx.clearRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'lighter';
+  const t = ms / 1000;
+  bloom *= .975;
+
+  for (const p of P) {
+    if (p.tx !== null) {
+      p.vx += (p.tx - p.x) * .013; p.vy += (p.ty - p.y) * .013;
+      p.vx *= .88; p.vy *= .88;
+    } else {
+      p.vx += (p.hx - p.x) * .0006 + Math.sin(t * .22 * p.sp + p.ph) * .011;
+      p.vy += (p.hy - p.y) * .0006 + Math.cos(t * .19 * p.sp + p.ph) * .011;
+      p.vx *= .975; p.vy *= .975;
+    }
+    p.x += p.vx; p.y += p.vy;
+
+    const tw = .66 + .34 * Math.sin(t * 1.5 * p.sp + p.ph);
+    const a  = Math.min(p.a * tw * bright * (1 + bloom * 2.6), 1);
+    const c  = p.tone < .62 ? '247,239,228' : p.tone < .87 ? '240,181,95' : '232,146,159';
+    ctx.fillStyle = `rgba(${c},${a})`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r * (1 + bloom * .8), 0, 6.283);
+    ctx.fill();
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  requestAnimationFrame(frame);
+}
+
+/* ========================= string lights ========================= */
+function buildLights() {
+  const host = document.getElementById('lights');
+  const N = 15, cols = ['#f0b55f','#e8929f','#f7efe4','#f0b55f','#cf9bd1'];
+  host.innerHTML = '<svg viewBox="0 0 100 92" preserveAspectRatio="none">' +
+    '<path class="wire" d="M0,7 Q50,62 100,7" vector-effect="non-scaling-stroke"/></svg>';
+  for (let i = 0; i < N; i++) {
+    const u = i / (N - 1);
+    const y = (1-u)*(1-u)*7 + 2*(1-u)*u*62 + u*u*7;     // same bézier as the wire
+    const b = document.createElement('i');
+    b.className = 'bulb';
+    b.style.cssText = `left:${u*100}%;top:${y}px;--c:${cols[i%cols.length]};` +
+      `--dur:${(2.4+Math.random()*2.2).toFixed(2)}s;--delay:${(Math.random()*2.4).toFixed(2)}s`;
+    host.appendChild(b);
+  }
+}
+
+/* ========================= the sequence ========================= */
+const go     = document.getElementById('go');
+const song   = document.getElementById('song');
+const sound  = document.getElementById('sound');
+const verse  = document.getElementById('verse');
+const bar    = document.querySelector('#bar i');
+const scenes = [...document.querySelectorAll('.scene')];
+
+const show = n => scenes.forEach((s,i) => s.classList.toggle('on', i === n));
+const wait = ms => new Promise(r => setTimeout(r, reduce ? Math.min(ms,220) : ms));
+
+function tally() {
+  const el = document.getElementById('tally');
+  if (reduce) { el.textContent = DAYS.toLocaleString(); return; }
+  const t0 = performance.now(), dur = 2600;
+  (function tick(now) {
+    const k = Math.min((now - t0) / dur, 1);
+    el.textContent = Math.round(DAYS * (1 - Math.pow(1-k, 3))).toLocaleString();
+    if (k < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+
+const LABELS = ['Begin', 'Keep going', "There's cake", 'Read what I wrote'];
+let step = 0, busy = false;
+
+async function advance() {
+  if (busy) return;
+  busy = true; go.disabled = true;
+
+  if (step === 0) {
+    document.body.classList.add('lit');
+    bright = 1;
+    sound.classList.add('in');
+    try { await song.play(); sound.classList.remove('muted'); } catch {}
+    show(-1);
+    await wait(900);
+    morph('name');
+    await wait(2400);
+  } else if (step === 1) {
+    release();
+    await wait(800);
+    show(1);
+  } else if (step === 2) {
+    show(2);
+    await wait(1300);
+    document.body.classList.add('candle-lit');
+  } else {
+    show(3);
+    await wait(600);
+    go.hidden = true;
+    showVerse();
+    busy = false;
+    return;
+  }
+
+  step++;
+  go.textContent = LABELS[step];
+  go.disabled = false;
+  busy = false;
+}
+
+/* ---- the letter, one line at a time ---- */
+let li = 0, timer = null;
+
+function showVerse() {
+  if (li >= VERSES.length) { finish(); return; }
+  verse.textContent = VERSES[li];
+  verse.classList.add('show');
+  bar.style.width = ((li + 1) / VERSES.length * 100) + '%';
+  if (li === BLOOM_AT) bloom = 1;
+  const hold = /\.\.\.$/.test(VERSES[li]) ? 1500 : 2000;
+  timer = setTimeout(hideVerse, hold);
+}
+
+function hideVerse() {
+  verse.classList.remove('show');
+  li++;
+  timer = setTimeout(showVerse, 800);
+}
+
+async function finish() {
+  document.getElementById('hint').style.opacity = 0;
+  morph('heart');
+  await wait(1900);
+  show(4);
+  await wait(2800);
+  release();
+  bright = .62;
+}
+
+addEventListener('pointerdown', e => {
+  if (!scenes[3].classList.contains('on') || e.target.closest('button')) return;
+  if (li >= VERSES.length) return;
+  clearTimeout(timer);
+  hideVerse();
+});
+
+go.addEventListener('click', advance);
+
+sound.addEventListener('click', async () => {
+  if (song.paused) { try { await song.play(); sound.classList.remove('muted'); } catch {} }
+  else { song.pause(); sound.classList.add('muted'); }
+});
+
+/* ========================= boot ========================= */
+addEventListener('resize', resize);
+addEventListener('orientationchange', () => setTimeout(resize, 120));
+if (window.visualViewport) visualViewport.addEventListener('resize', resize);
+resize();
+buildLights();
+requestAnimationFrame(frame);
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { show(0); tally(); });
+})();
 </script>
+</body>
 </html>
