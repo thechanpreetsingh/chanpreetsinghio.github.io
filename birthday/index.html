@@ -439,28 +439,58 @@ function morph(kind, instant) {
   });
 }
 
+/* mean distance still to travel, px */
+function formedness() {
+  let n = 0, d = 0;
+  for (const p of P) {
+    if (p.tx === null) continue;
+    d += Math.abs(p.tx - p.x) + Math.abs(p.ty - p.y); n++;
+  }
+  return n ? d / n : 0;
+}
+
+/* resolve once the formation has genuinely settled, rather than after a
+   fixed delay that only holds at 60fps. capped so it can never hang. */
+function whenFormed(capMs) {
+  if (reduce) return Promise.resolve();
+  return new Promise(res => {
+    const t0 = performance.now();
+    (function poll() {
+      if (formedness() < 1.5 || performance.now() - t0 > capMs) return res();
+      setTimeout(poll, 100);
+    })();
+  });
+}
+
 function release() {
   shape = null;
   for (const p of P) { p.tx = p.ty = null; p.hx = Math.random()*W; p.hy = Math.random()*H; }
 }
 
-let bright = .34, bloom = 0;
+let bright = .34, bloom = 0, lastMs = 0;
 function frame(ms) {
+  /* Advance by elapsed TIME, not by frame. 2159 particles under 'lighter'
+     will not hold 60fps on a phone, and the scene timings are wall-clock:
+     frame-based springs fall behind their own schedule and the formation
+     gets released before it has finished building. dt is in 60fps units. */
+  const dt = lastMs ? Math.min((ms - lastMs) / 16.667, 3) : 1;
+  lastMs = ms;
+
   ctx.clearRect(0, 0, W, H);
   ctx.globalCompositeOperation = 'lighter';
   const t = ms / 1000;
-  bloom *= .975;
+  bloom *= Math.pow(.975, dt);
 
   for (const p of P) {
     if (p.tx !== null && ms - morphT0 >= p.wait) {
-      p.vx += (p.tx - p.x) * p.k; p.vy += (p.ty - p.y) * p.k;
-      p.vx *= .942; p.vy *= .942;
+      p.vx += (p.tx - p.x) * p.k * dt; p.vy += (p.ty - p.y) * p.k * dt;
+      const d = Math.pow(.942, dt); p.vx *= d; p.vy *= d;
     } else {
-      p.vx += (p.hx - p.x) * .0006 + Math.sin(t * .22 * p.sp + p.ph) * .011;
-      p.vy += (p.hy - p.y) * .0006 + Math.cos(t * .19 * p.sp + p.ph) * .011;
-      p.vx *= .975; p.vy *= .975;
+      p.vx += ((p.hx - p.x) * .0006 + Math.sin(t * .22 * p.sp + p.ph) * .011) * dt;
+      p.vy += ((p.hy - p.y) * .0006 + Math.cos(t * .19 * p.sp + p.ph) * .011) * dt;
+      const d = Math.pow(.975, dt); p.vx *= d; p.vy *= d;
     }
-    p.x += p.vx; p.y += p.vy;
+    p.x += p.vx * dt; p.y += p.vy * dt;
 
     const tw = .66 + .34 * Math.sin(t * 1.5 * p.sp + p.ph);
     const a  = Math.min(p.a * tw * bright * (1 + bloom * 2.6), 1);
@@ -528,9 +558,11 @@ async function advance() {
     show(-1);
     await wait(900);
     morph('greeting');          // the dots say it first...
-    await wait(5200);
+    await whenFormed(11000);
+    await wait(1700);           // hold it, fully built
     morph('name');              // ...then become her
-    await wait(6200);
+    await whenFormed(11000);
+    await wait(2100);
   } else if (step === 1) {
     release();
     await wait(800);
@@ -576,7 +608,8 @@ function hideVerse() {
 async function finish() {
   document.getElementById('hint').style.opacity = 0;
   morph('heart');
-  await wait(5000);
+  await whenFormed(11000);
+  await wait(1600);
   show(4);
   await wait(2800);
   release();
