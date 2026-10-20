@@ -190,13 +190,13 @@ body.candle-lit .flame{opacity:1;animation:flick 2.4s ease-in-out infinite}
 <main>
   <section class="scene" id="s0">
     <p class="kicker">For Gurleen</p>
-    <p class="lede">Every dot here is one day<br>since you married me.</p>
-    <p class="sub"><span class="count" id="tally">0</span> ordinary days.<br>Nobody photographed them. I remember all of them.</p>
+    <p class="lede">Every dot here is one day<br>you have loved me.</p>
+    <p class="sub"><span class="count" id="tally">0</span> of them, since you married me.<br>Nobody photographed a single one. I remember all of them.</p>
   </section>
 
   <section class="scene" id="s1">
-    <p class="kicker">Six years</p>
-    <p class="lede">They were never<br>ordinary at all.</p>
+    <p class="kicker"><span id="years">5</span> years</p>
+    <p class="lede">Not one of them<br>was ordinary.</p>
   </section>
 
   <section class="scene" id="s2">
@@ -218,7 +218,7 @@ body.candle-lit .flame{opacity:1;animation:flick 2.4s ease-in-out infinite}
 
   <section class="scene" id="s4">
     <p class="sig">Happy Birthday,<br><em>my love.</em></p>
-    <p class="sub">That is all of it &mdash; everything I had to say.<br>You can close this now, or stay a while.</p>
+    <p class="sub">That's everything I had to say.<br>Stay as long as you like. I'll be right here.</p>
   </section>
 </main>
 
@@ -235,7 +235,15 @@ body.candle-lit .flame{opacity:1;animation:flick 2.4s ease-in-out infinite}
 (() => {
 'use strict';
 
-const DAYS = 2190;                 // six years — one particle per day
+// 22 November 2020 — the day she married me.
+// Midnight-to-midnight in local time, so DST can never shift the count by a day.
+const WEDDING = new Date(2020, 10, 22);
+const _now = new Date();
+const DAYS  = Math.max(1, Math.round(
+  (new Date(_now.getFullYear(), _now.getMonth(), _now.getDate()) - WEDDING) / 864e5));
+// calendar years, not days/365.25 — that rounds down on the anniversary itself
+const YEARS = _now.getFullYear() - 2020 -
+  (_now < new Date(_now.getFullYear(), 10, 22) ? 1 : 0);
 const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 const VERSES = [
@@ -528,6 +536,7 @@ if (window.visualViewport) visualViewport.addEventListener('resize', resize);
 resize();
 buildLights();
 requestAnimationFrame(frame);
+document.getElementById('years').textContent = YEARS;
 (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { show(0); tally(); });
 })();
 </script>
