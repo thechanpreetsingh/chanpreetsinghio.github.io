@@ -186,6 +186,20 @@ body.candle-lit .flame{opacity:1;animation:flick 2.4s ease-in-out infinite}
 #sound.muted .on{display:none}
 #sound.muted .off{display:block}
 
+/* pull-to-reload affordance */
+#pull{
+  position:fixed;top:max(12px,calc(env(safe-area-inset-top,0px) + 6px));left:50%;z-index:10;
+  width:40px;height:40px;margin-left:-20px;display:grid;place-items:center;border-radius:50%;
+  border:1px solid rgba(240,181,95,.3);background:rgba(11,8,16,.55);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  color:var(--glow);opacity:0;pointer-events:none;
+  transform:translateY(-8px) rotate(0deg);
+}
+#pull.snap{transition:opacity .45s var(--ease),transform .45s var(--ease)}
+#pull.ready{border-color:rgba(240,181,95,.95);background:rgba(240,181,95,.14)}
+#pull svg{width:18px;height:18px;fill:none;stroke:currentColor;
+  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
 @media (max-width:520px){
   main{padding:calc(74px + env(safe-area-inset-top,0px)) 20px calc(138px + env(safe-area-inset-bottom,0px))}
   #lights{height:72px}
@@ -239,6 +253,10 @@ body.candle-lit .flame{opacity:1;animation:flick 2.4s ease-in-out infinite}
     <p class="sub">That's everything I had to say.<br>Stay as long as you like. I'll be right here.</p>
   </section>
 </main>
+
+<div id="pull" aria-hidden="true">
+  <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 3.5v5h5"/></svg>
+</div>
 
 <button id="go">Begin</button>
 
@@ -565,12 +583,51 @@ async function finish() {
   bright = .62;
 }
 
+/* A tap advances the letter; a drag must not. Track movement so a
+   pull-to-reload swipe doesn't also skip a line. */
+const pullEl = document.getElementById('pull');
+const PULL_AT = 110;                       // px of drag that triggers a reload
+let downX = 0, downY = 0, dragged = false, pulling = false, pulled = 0;
+
 addEventListener('pointerdown', e => {
+  downX = e.clientX; downY = e.clientY;
+  dragged = false;
+  pulling = e.pointerType === 'touch' && !e.target.closest('button');
+  pulled = 0;
+  pullEl.classList.remove('snap');
+});
+
+addEventListener('pointermove', e => {
+  const dx = e.clientX - downX, dy = e.clientY - downY;
+  if (Math.hypot(dx, dy) > 12) dragged = true;
+  if (!pulling) return;
+  if (dy > 0 && Math.abs(dy) > Math.abs(dx)) {
+    pulled = Math.min(dy, 170);
+    pullEl.style.opacity   = Math.min(pulled / (PULL_AT * .85), 1);
+    pullEl.style.transform =
+      `translateY(${Math.min(pulled * .42, 54) - 8}px) rotate(${pulled * 2.2}deg)`;
+    pullEl.classList.toggle('ready', pulled >= PULL_AT);
+  }
+});
+
+function endPull() {
+  if (pulling && pulled >= PULL_AT) { location.reload(); return; }
+  pulling = false; pulled = 0;
+  pullEl.classList.add('snap');
+  pullEl.classList.remove('ready');
+  pullEl.style.opacity = 0;
+  pullEl.style.transform = 'translateY(-8px) rotate(0deg)';
+}
+
+addEventListener('pointerup', e => {
+  endPull();
+  if (dragged) return;                     // a swipe, not a tap
   if (!scenes[3].classList.contains('on') || e.target.closest('button')) return;
   if (li >= VERSES.length) return;
   clearTimeout(timer);
   hideVerse();
 });
+addEventListener('pointercancel', endPull);
 
 go.addEventListener('click', advance);
 
