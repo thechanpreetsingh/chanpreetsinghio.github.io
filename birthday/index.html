@@ -80,6 +80,24 @@ main{
   font-family:'Jost',system-ui,sans-serif;font-weight:300;font-size:11px;
   letter-spacing:.42em;text-transform:uppercase;color:var(--dim);margin-bottom:26px;
 }
+/* the opening dedication — lit, with hairlines running off either side */
+.kicker.hero{
+  color:var(--glow);font-weight:400;font-size:clamp(11px,3vw,13px);
+  letter-spacing:.5em;text-indent:.5em;
+  text-shadow:0 0 20px rgba(240,181,95,.6),0 0 40px rgba(240,181,95,.25);
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  margin-bottom:34px;
+  animation:dedicate 5s ease-in-out infinite;
+}
+.kicker.hero::before,.kicker.hero::after{
+  content:"";height:1px;width:clamp(20px,9vw,54px);
+  background:linear-gradient(90deg,transparent,rgba(240,181,95,.7));
+}
+.kicker.hero::after{transform:scaleX(-1)}
+@keyframes dedicate{
+  0%,100%{opacity:.82;text-shadow:0 0 18px rgba(240,181,95,.45),0 0 36px rgba(240,181,95,.18)}
+  50%    {opacity:1;  text-shadow:0 0 26px rgba(240,181,95,.75),0 0 52px rgba(240,181,95,.32)}
+}
 .lede{font-size:clamp(26px,6.4vw,40px);font-weight:300;line-height:1.38;font-style:italic}
 .sub{
   font-family:'Jost',sans-serif;font-weight:300;font-size:clamp(13px,3.4vw,15px);
@@ -189,7 +207,7 @@ body.candle-lit .flame{opacity:1;animation:flick 2.4s ease-in-out infinite}
 
 <main>
   <section class="scene" id="s0">
-    <p class="kicker">For Gurleen</p>
+    <p class="kicker hero">For Gurleen</p>
     <p class="lede">Every dot here is one day<br>you have loved me.</p>
     <p class="sub"><span class="count" id="tally">0</span> of them, since you married me.<br>Nobody photographed a single one. I remember all of them.</p>
   </section>
@@ -294,41 +312,55 @@ function resize() {
   if (shape) morph(shape, true);
 }
 
-/* sample anything drawn on an offscreen canvas into a point cloud */
-function sample(draw, step) {
+/* Rasterise the shape once, then find the grid spacing that yields ~`want`
+   points. A regular grid keeps the dots evenly spaced — thinning a dense
+   sample at random clumps them and leaves the letterforms ragged. But no
+   INTEGER spacing lands near the target (step 2 gives ~1600 points, step 1
+   gives ~6200), so the spacing has to be fractional, hence the search.
+   Coarsening to an integer step was what dropped this face's hairlines and
+   broke the letters on a phone. */
+function cloud(draw, want) {
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
-  const g = c.getContext('2d', { willReadFrequently:true });
+  const g = c.getContext('2d', { willReadFrequently: true });
   draw(g, W, H);
   const d = g.getImageData(0, 0, W, H).data;
-  const pts = [];
-  const s = Math.max(2, Math.round(step));
-  for (let y = 0; y < H; y += s)
-    for (let x = 0; x < W; x += s)
-      if (d[(y * W + x) * 4 + 3] > 128) pts.push({ x, y });
-  return pts;
-}
 
-function fitStep(draw, want) {       // converge on a step size giving ~want points
-  let step = 6, pts = sample(draw, step);
-  for (let k = 0; k < 6 && pts.length; k++) {
-    if (pts.length > want * 1.6) step += 1.5;
-    else if (pts.length < want * .6) step -= 1;
-    else break;
-    if (step < 2) { step = 2; pts = sample(draw, step); break; }
-    pts = sample(draw, step);
+  const scan = step => {
+    const pts = [];
+    for (let y = 0; y < H; y += step)
+      for (let x = 0; x < W; x += step) {
+        const xi = x | 0, yi = y | 0;
+        if (d[(yi * W + xi) * 4 + 3] > 128) pts.push({ x: xi, y: yi });
+      }
+    return pts;
+  };
+
+  let lo = .7, hi = 14, pts = scan(2);          // smaller step => more points
+  for (let i = 0; i < 16; i++) {
+    const mid = (lo + hi) / 2;
+    pts = scan(mid);
+    if (pts.length > want) lo = mid; else hi = mid;
+    if (Math.abs(pts.length - want) <= want * .03) break;
   }
   return pts;
 }
 
 const drawName = (g, w, h) => {
   const size = Math.min(w * .22, h * .30);
-  g.fillStyle = '#fff';
+  g.fillStyle = '#fff'; g.strokeStyle = '#fff';
   g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.lineJoin = g.lineCap = 'round';
   try { g.letterSpacing = '0.06em'; } catch {}
-  g.font = `400 ${size}px 'Cormorant Garamond', Georgia, serif`;
-  if (g.measureText('GURLEEN').width > w * .88)
-    g.font = `400 ${size * (w * .88 / g.measureText('GURLEEN').width)}px 'Cormorant Garamond', Georgia, serif`;
+  const face = px => `500 ${px}px 'Cormorant Garamond', Georgia, serif`;
+  g.font = face(size);
+  let px = size;
+  const w0 = g.measureText('GURLEEN').width;
+  if (w0 > w * .88) { px = size * (w * .88 / w0); g.font = face(px); }
+  // stroke as well as fill: the hairlines of this face are ~2px at phone
+  // size, thin enough for the sampling grid to skip entirely
+  g.lineWidth = Math.max(1.6, px * .018);
+  g.strokeText('GURLEEN', w / 2, h * .46);
   g.fillText('GURLEEN', w / 2, h * .46);
 };
 
@@ -350,7 +382,7 @@ function morph(kind, instant) {
   shape = kind;
   morphT0 = performance.now();
   const draw = kind === 'name' ? drawName : drawHeart;
-  const pts = fitStep(draw, DAYS);
+  const pts = cloud(draw, DAYS);
   if (!pts.length) return;
 
   let cx = 0, cy = 0;
@@ -530,9 +562,11 @@ sound.addEventListener('click', async () => {
 });
 
 /* ========================= boot ========================= */
-addEventListener('resize', resize);
-addEventListener('orientationchange', () => setTimeout(resize, 120));
-if (window.visualViewport) visualViewport.addEventListener('resize', resize);
+let rzT = null;
+const resizeSoon = () => { clearTimeout(rzT); rzT = setTimeout(resize, 160); };
+addEventListener('resize', resizeSoon);
+addEventListener('orientationchange', () => setTimeout(resize, 220));
+if (window.visualViewport) visualViewport.addEventListener('resize', resizeSoon);
 resize();
 buildLights();
 requestAnimationFrame(frame);
